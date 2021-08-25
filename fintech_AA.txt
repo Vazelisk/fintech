@@ -1,0 +1,43 @@
+№1
+SELECT pilot_id FROM Пилоты
+RIGHT JOIN Рейсы ON Рейсы.second_pilot_id=Пилоты.pilot_id
+WHERE second_pilot_id = pilot_id
+AND flight_dt like 'август'
+AND desination like 'Шереметьево'
+
+
+№2
+CREATE TABLE cargo_flights
+(
+    SELECT plane_id
+    FROM Самолеты
+    RIGHT JOIN Самолеты ON Самолеты.plane_id=Рейсы.plane_id
+    WHERE cargo_flg = 1
+)
+
+CREATE TABLE biggy
+(
+    SELECT flight_id, plane_id, first_pilot_id, age
+    FROM cargo_flights
+    RIGHT JOIN Пилоты ON cargo_flights.first_pilot_id=Пилоты.plane_id  
+)
+
+
+SELECT COUNT(pilot_id) AS masters from biggy
+WHERE AGE > 45 AND COUNT(plane_id) > 30
+GROUP BY pilot_id
+
+
+№3
+CREATE TABLE counter
+(
+    SELECT first_pilot_id, COUNT(quantity) AS members
+    FROM Рейсы
+    GROUP BY first_pilot_id
+)
+
+
+SELECT first_pilot_id, members FROM counter
+GROUP BY first_pilot_id
+ORDER BY members DESC
+LIMIT 10
